@@ -17,6 +17,16 @@ var cube1 = new THREE.Mesh( geometry, material );
 cube1.material.transparent = true;
 scene.add( cube1 );
 
+
+//try to orbit something
+var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+var material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+var cube2 = new THREE.Mesh( geometry, material );
+cube2.material.transparent = true;
+scene.add( cube2 );
+
+
+
 camera.position.z = 5;
 
 var animate = function () {
@@ -27,6 +37,8 @@ var animate = function () {
     cube1.rotation.x += 0.03;
     cube1.rotation.y += 0.03;
     cube1.material.opacity = (1+ Math.sin(new Date().getTime() * .0025))/2;
+    cube2.position.x = 3 * Math.sin(new Date().getTime() * .0025);
+    cube2.position.z = 3 * Math.cos(new Date().getTime() * .0025);//-pi or some ofset of sin wave should give you an orbit
     //console.log((1+ Math.sin(new Date().getTime() * .0025))/2);
     renderer.render( scene, camera );
 };

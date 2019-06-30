@@ -35,6 +35,9 @@ let offButton = document.getElementById("offButton");
 
 
 onButton.addEventListener('click',(event)=>{
+    while(scene.children.length > 0){ 
+        scene.remove(scene.children[0]); 
+    }
     numCubes = document.getElementById("number").value;
     cubes = []
     for(i=0;i<numCubes;i++){

@@ -15,6 +15,17 @@ camera.position.y = 10;
 camera.rotation.x = -1;
 
 
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+
+
 let onButton = document.getElementById("onButton");
 let offButton = document.getElementById("offButton");
 
@@ -29,7 +40,7 @@ onButton.addEventListener('click',(event)=>{
     cubesy = [];
     for(i=0;i<numCubes;i++){
 
-        var material = new THREE.MeshBasicMaterial( { color: '#'+Math.floor(Math.random()*16777215).toString(16) } );
+        var material = new THREE.MeshBasicMaterial( { color: getRandomColor() } );
         cubes[i] = new THREE.Mesh( geometry, material );
         cubes[i].material.transparent = true;
         cubesx[i] = (Math.random() / 10);
@@ -38,11 +49,12 @@ onButton.addEventListener('click',(event)=>{
 
     
     }
-    var size = 10;
-    var divisions = 10;
+    var size = 100;
+    var divisions = 100;
 
     var gridHelper = new THREE.GridHelper( size, divisions );
     scene.add( gridHelper );
+    gridHelper.position.y = -2;
     if(animating == null){animate();animating = true;}
     console.log("on");
 });
@@ -60,6 +72,7 @@ var animate = function () {
     for(i=0;i<cubes.length;i++){
         cubes[i].position.x = 5 * Math.sin(.5*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI)));
         cubes[i].position.z = 5 * Math.cos(.5*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI)));
+        cubes[i].position.y = 2.5 * Math.sin(.25*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI))-new Date().getTime() * .0025);
         //cubes[i].rotation.x += 0.03;
         //cubes[i].rotation.y += 0.03;
         cubes[i].rotation.x += cubesx[i];

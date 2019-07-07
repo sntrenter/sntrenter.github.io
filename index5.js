@@ -77,8 +77,9 @@ var animate = function () {
         cubes[i].position.x = 5 * Math.sin(.5*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI)));
         cubes[i].position.z = 5 * Math.cos(.5*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI)));
         cubes[i].position.y = 3 * Math.sin(upDownSpeed[i]*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI))-cubesYOffSet[i]);
-        //cubes[i].rotation.x += 0.03;
-        //cubes[i].rotation.y += 0.03;
+        //new Date().getTime() * .0025
+        cubes[i].scale.set(Math.sin(new Date().getTime() * .0025),Math.sin(new Date().getTime() * .0025),Math.sin(new Date().getTime() * .0025));
+
         cubes[i].rotation.x += cubesx[i];
         cubes[i].rotation.y += cubesy[i];
 

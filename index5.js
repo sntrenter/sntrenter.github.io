@@ -38,6 +38,8 @@ onButton.addEventListener('click',(event)=>{
     cubes = [];
     cubesx = [];
     cubesy = [];
+    cubesYOffSet = [];
+    upDownSpeed = [];
     for(i=0;i<numCubes;i++){
 
         var material = new THREE.MeshBasicMaterial( { color: getRandomColor() } );
@@ -45,6 +47,8 @@ onButton.addEventListener('click',(event)=>{
         cubes[i].material.transparent = true;
         cubesx[i] = (Math.random() / 10);
         cubesy[i] = (Math.random() / 10);
+        cubesYOffSet[i] = (Math.random()*(2*Math.PI));
+        upDownSpeed[i] = ((Math.random()*10)/4);
         scene.add(cubes[i])
 
     
@@ -72,7 +76,7 @@ var animate = function () {
     for(i=0;i<cubes.length;i++){
         cubes[i].position.x = 5 * Math.sin(.5*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI)));
         cubes[i].position.z = 5 * Math.cos(.5*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI)));
-        cubes[i].position.y = 2.5 * Math.sin(.25*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI))-new Date().getTime() * .0025);
+        cubes[i].position.y = 3 * Math.sin(upDownSpeed[i]*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI))-cubesYOffSet[i]);
         //cubes[i].rotation.x += 0.03;
         //cubes[i].rotation.y += 0.03;
         cubes[i].rotation.x += cubesx[i];

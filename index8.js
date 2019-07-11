@@ -31,6 +31,43 @@ function GRIDHELPER(){
     gridHelper.position.y = -2;
 }
 
+function generateTones(pitch,hi,low,scaleSize){
+    tones = [];
+    octaves = [];
+    var lowest_pitch = pitch;
+    while(pitch>low){
+        lowest_pitch = pitch;
+        pitch = pitch/2;
+    }
+    var pitchOctave = lowest_pitch;
+    while(pitchOctave<hi){
+        octaves.push(pitchOctave);
+        pitchOctave = pitchOctave*2;
+    }
+    console.log(scaleSize);
+    for (i = 0; i < octaves.length;i++){
+        let division = octaves[i] / scaleSize;
+        note = octaves[i]
+        for(j=0;j<scaleSize;j++){
+            //console.log(note);
+            tones.push(note);
+            note = note + division;
+        }
+    }
+    tones = tones.filter(x => x < hi);
+    return tones;
+}
+///////
+function TONEHELPER(){
+    let pitch = document.getElementById("Pitch").value;
+    let hi = document.getElementById("hi").value;
+    let low = document.getElementById("low").value;
+    let scaleSize = document.getElementById("scaleSize").value;
+    console.log(pitch,hi,low,scaleSize);
+    return generateTones(pitch,hi,low,scaleSize);
+//console.log(tones);
+}
+///////
 
 function setPosition(cubeObj){
     cubeObj.cube.position.x = 5 * Math.sin(.5*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI)));
@@ -56,6 +93,8 @@ onButton.addEventListener('click',(event)=>{
     while(scene.children.length > 0){ scene.remove(scene.children[0]);  }
     for(i = 0;i<cubes.length;i++){cubes[i].osc.stop();}
     numCubes = document.getElementById("number").value;
+    tones = TONEHELPER();
+    
     for(i=0;i<numCubes;i++){
         var geometry = new THREE.BoxGeometry( 1, 1, 1 );
         var material = new THREE.MeshBasicMaterial( { color: getRandomColor() } );
@@ -65,9 +104,10 @@ onButton.addEventListener('click',(event)=>{
             yOffSet:(Math.random()*(2*Math.PI)),
             ySpeed:((Math.random()/2)), 
             scaleSpeed: Math.random() / 2,
-            osc: new Tone.Oscillator(Math.random() * 1000, "sine").toMaster().start(), 
+            osc: new Tone.Oscillator(tones[Math.floor(Math.random() * tones.length)], "sine").toMaster().start(), 
         }
         cubes[i].cube.material.transparent = true;
+        console.log(cubes[i].osc.frequency.value)
         scene.add(cubes[i].cube)
     }
     GRIDHELPER()

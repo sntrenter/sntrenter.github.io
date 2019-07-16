@@ -9,6 +9,7 @@ document.body.appendChild( renderer.domElement );
 let onButton = document.getElementById("onButton");
 let offButton = document.getElementById("offButton");
 
+
 camera.position.z = 10;
 camera.position.y = 10;
 camera.rotation.x = -1;
@@ -33,28 +34,23 @@ function GRIDHELPER(){
 
 function generateTones(pitch,hi,low,scaleSize){
     tones = [];
-    octaves = [];
+    //octaves = [];
     var lowest_pitch = pitch;
     while(pitch>low){
         lowest_pitch = pitch;
         pitch = pitch/2;
     }
-    var pitchOctave = lowest_pitch;
-    while(pitchOctave<hi){
-        octaves.push(pitchOctave);
-        pitchOctave = pitchOctave*2;
+    n = 1
+    while(true){
+        //newTone = lowest_pitch * (2^(1/scaleSize))^n
+        newTone = lowest_pitch * Math.pow(Math.pow(2,1/scaleSize),n)//magic function
+        n++
+        if(newTone>hi){break;}
+        else{tones.push(newTone)}
+        //console.log(tones);
     }
-    console.log(scaleSize);
-    for (i = 0; i < octaves.length;i++){
-        let division = octaves[i] / scaleSize;
-        note = octaves[i]
-        for(j=0;j<scaleSize;j++){
-            //console.log(note);
-            tones.push(note);
-            note = note + division;
-        }
-    }
-    tones = tones.filter(x => x < hi);
+    //tones = tones.filter(x => x < hi);
+    console.log(tones);
     return tones;
 }
 ///////
@@ -65,7 +61,7 @@ function TONEHELPER(){
     let scaleSize = document.getElementById("scaleSize").value;
     console.log(pitch,hi,low,scaleSize);
     return generateTones(pitch,hi,low,scaleSize);
-//console.log(tones);
+console.log(tones);
 }
 ///////
 
@@ -104,11 +100,12 @@ onButton.addEventListener('click',(event)=>{
             yOffSet:(Math.random()*(2*Math.PI)),
             ySpeed:((Math.random()/2)), 
             scaleSpeed: Math.random() / 2,
-            osc: new Tone.Oscillator(tones[Math.floor(Math.random() * tones.length)], "sine").toMaster().start(), 
+            osc: new Tone.Oscillator(tones[Math.floor(Math.random() * tones.length)], "triangle").toMaster().start(), 
         }
+        cubes[i].osc.volume.value = -20;
         cubes[i].cube.material.transparent = true;
-        console.log(cubes[i].osc.frequency.value)
-        scene.add(cubes[i].cube)
+        console.log(cubes[i].osc.frequency.value);
+        scene.add(cubes[i].cube);
     }
     GRIDHELPER()
     if(animating == null){animate();animating = true;}
@@ -122,6 +119,8 @@ var animate = function () {
         setRotation(cubes[i]);
         setScale(cubes[i]);
     }
+
+
     renderer.render( scene, camera );
 };
 

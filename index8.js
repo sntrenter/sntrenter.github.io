@@ -8,6 +8,8 @@ document.body.appendChild( renderer.domElement );
 
 let onButton = document.getElementById("onButton");
 let offButton = document.getElementById("offButton");
+let slider = document.getElementById("volume");
+let volume = slider.value;
 
 
 camera.position.z = 10;
@@ -53,7 +55,7 @@ function generateTones(pitch,hi,low,scaleSize){
     console.log(tones);
     return tones;
 }
-///////
+
 function TONEHELPER(){
     let pitch = document.getElementById("Pitch").value;
     let hi = document.getElementById("hi").value;
@@ -63,7 +65,6 @@ function TONEHELPER(){
     return generateTones(pitch,hi,low,scaleSize);
 console.log(tones);
 }
-///////
 
 function setPosition(cubeObj){
     cubeObj.cube.position.x = 5 * Math.sin(.5*(new Date().getTime() * .0025)+((i/cubes.length)*(2*Math.PI)));
@@ -102,7 +103,7 @@ onButton.addEventListener('click',(event)=>{
             scaleSpeed: Math.random() / 2,
             osc: new Tone.Oscillator(tones[Math.floor(Math.random() * tones.length)], "triangle").toMaster().start(), 
         }
-        cubes[i].osc.volume.value = -20;
+        cubes[i].osc.volume.value = volume;
         cubes[i].cube.material.transparent = true;
         console.log(cubes[i].osc.frequency.value);
         scene.add(cubes[i].cube);
@@ -118,6 +119,7 @@ var animate = function () {
         setPosition(cubes[i]);
         setRotation(cubes[i]);
         setScale(cubes[i]);
+        cubes[i].osc.volume.value = volume;
     }
 
 
@@ -135,4 +137,12 @@ offButton.addEventListener('click',(event)=>{
     }
     scene.dispose();
     console.log("off");
+});
+
+
+
+slider.addEventListener('click',(event)=>{
+    volume = slider.value;
+    console.log(volume);
+
 });
